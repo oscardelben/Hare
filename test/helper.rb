@@ -1,3 +1,3 @@
 require 'minitest/autorun'
 
-require 'parser'
+require 'http_parser'
