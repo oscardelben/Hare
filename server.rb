@@ -4,40 +4,26 @@
 
 require 'socket'
 require 'http_parser'
+require 'eventmachine'
 
-server = TCPServer.new '127.0.0.1', '8080'
+class Server < EM::Connection
+  def post_init
+    puts "New connection received."
+    @http_parser = HttpParser.new
+  end
 
-while socket = server.accept
-  puts "Connection received."
-  begin
-    request_line = socket.gets
+  def receive_data data
+    @http_parser.add_data data
 
-    raw_headers = ""
-    add_newline = false
-    while (line = socket.gets) !~ /^\s+$/ # CRLF
-      raw_headers << "\n" if add_newline
-      raw_headers << line
-      add_newline = true
-    end
+    # TODO: this has to be changed.
+    close_connection if @http_parser.all_data_received?
+  end
 
-    # Body is signaled by either Content-Length or Transfer-Encoding
-    body = nil
-    if false # not implemented yet
-      body = socket.gets
-    end
-
-    p request_line
-    p raw_headers
-    p body
-
-    HttpParser.new request_line, raw_headers, body
-
-    # TODO: make sure you timeout the client if you don't get
-    # everything
-
-    socket.puts "Hello, world!"
-
-  ensure
-    socket.close
+  def unbind
+    puts "Client disconnected."
   end
 end
+
+EM.run {
+  EM.start_server "127.0.0.1", 8080, Server
+}
