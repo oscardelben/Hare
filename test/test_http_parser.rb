@@ -3,7 +3,7 @@ require 'helper'
 class TestHttpParser < MiniTest::Unit::TestCase
 
   def setup
-    @http_parser = HttpParser.new
+    @http_parser = Hare::HttpParser.new
   end
 
   def test_all_data_received_when_all_data
