@@ -2,6 +2,7 @@
 require 'rack'
 
 require File.join(File.dirname(__FILE__) + '/lib/hare')
+require 'rack/handler/hare'
 
 class MyApp
 

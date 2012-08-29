@@ -12,11 +12,16 @@ module Hare
     end
 
     def run
+      # TODO: make sure it's not running already?
       EM.run do
         puts "Starting Hare server..."
-        EM.start_server "127.0.0.1", 8080, HttpParser
+        EM.start_server "127.0.0.1", 8080, Socket, &method(:initialize_socket)
         puts "Server started at 127.0.0.1:8080"
       end
+    end
+
+    def initialize_socket(socket)
+      socket.server = self
     end
 
   end
