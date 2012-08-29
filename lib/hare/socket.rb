@@ -4,23 +4,30 @@ module Hare
     # The role of this class is to handle the incoming data from the
     # connection.
 
-    attr_accessor :data, :server
+    attr_accessor :app, :request
 
     def post_init
-      @data = ""
+      @request = Request.new
     end
 
     def receive_data data
-      @data << data
+      request.add_data data
 
-      close_connection if all_data_received?
+      post_receive_data
     end
 
-    def all_data_received?
-      # Check that at least request line and the headers have been
-      # received.
-      # TODO: check for body presence when necessary
-      data.split("\n").size > 1 && data.end_with?("\n")
+    private
+
+    def post_receive_data
+      if request.finished?
+        status, headers, body = app.call(request.env)
+
+        response = Response.new(status, headers, body)
+        send_data response.data
+
+        close_connection
+      end
     end
+
   end
 end

@@ -1,4 +1,3 @@
-
 module Hare
   class Server
 
@@ -21,7 +20,7 @@ module Hare
     end
 
     def initialize_socket(socket)
-      socket.server = self
+      socket.app = app
     end
 
   end
