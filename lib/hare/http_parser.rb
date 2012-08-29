@@ -1,7 +1,7 @@
 require 'eventmachine'
 
 module Hare
-  class HttpParser
+  class HttpParser < EventMachine::Connection
 
     # The role of this class is to determine wherever the server has
     # enough data, and deal with it.
@@ -12,8 +12,10 @@ module Hare
       @data = ""
     end
 
-    def add_data data
+    def receive_data data
       @data << data
+
+      close_connection if all_data_received?
     end
 
     def all_data_received?
