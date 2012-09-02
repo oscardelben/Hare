@@ -29,7 +29,32 @@ module Hare
     end
 
     def request_uri
-      # '*' | absolute_uri | abs_path | authority
+      if request_line
+        request_line.split[1]
+      end
+    end
+
+    # Returns a hash of headers
+    def headers
+      request_data = data.split("\n\n").first if data.include? "\n\n"
+
+      if request_data
+        parse_headers(request_data)
+      else
+        {}
+      end
+    end
+
+    private
+
+    def parse_headers(headers_data)
+      headers = {}
+      # Ignore first line (request_line)
+      headers_data.split("\n")[1..-1].each do |line|
+        key, value = line.split('=').map(&:strip)
+        headers[key] = value
+      end
+      headers
     end
   end
 end
