@@ -3,7 +3,7 @@ $:.unshift File.dirname(__FILE__)
 
 require 'eventmachine'
 
-require 'hare/request'
+require 'hare/http_parser'
 require 'hare/server'
 require 'hare/socket'
 

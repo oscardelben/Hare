@@ -1,3 +1,4 @@
+# A Request object!
 module Hare
   class Request
 

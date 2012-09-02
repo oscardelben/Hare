@@ -2,6 +2,12 @@ require 'spec_helper'
 
 describe Hare::Request do
 
+  describe 'add_data' do
+    # TODO: test that calling add_data multiple times will populate all
+    # headers, etc
+    it 'continuosly parse data'
+  end
+
   describe 'finished?' do
     it 'returns true if headers and body have been received' do
       pending 'missing implementation'
