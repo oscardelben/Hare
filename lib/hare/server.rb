@@ -19,6 +19,11 @@ module Hare
       end
     end
 
+    # This undocumented callback gets called by #start_server every time
+    # a connection is received, passing the handler object (an instance
+    # of +Socket+ in this case).
+    #
+    # We use this callback to pass the +app+ object to the socket.
     def initialize_socket(socket)
       socket.app = app
     end
