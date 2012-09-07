@@ -4,6 +4,7 @@ $:.unshift File.dirname(__FILE__)
 require 'eventmachine'
 
 require 'hare/http_parser'
+require 'hare/request'
 require 'hare/server'
 require 'hare/socket'
 

@@ -75,4 +75,24 @@ describe Hare::HttpParser do
     end
   end
 
+  describe 'receiving data in chunks' do
+    it 'handles data received in chunks' do
+      data = ""
+      data += "GET http://example.com"
+
+      parser.parse! data
+      parser.request_line.should be_nil
+      parser.headers.should == {}
+
+      data = "\nAccept-Charset = something"
+      data += "\nFrom = http://example.com"
+      data += "\n\n"
+
+      parser.parse! data
+      parser.request_line.should == 'GET http://example.com'
+      parser.headers['Accept-Charset'].should == 'something'
+      parser.headers['From'].should == 'http://example.com'
+    end
+  end
+
 end

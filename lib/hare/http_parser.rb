@@ -10,10 +10,14 @@ module Hare
     attr_accessor :data
 
     def initialize
+      @data = ""
     end
 
+    # TODO: investigate if we can leverage some io class for incoming
+    # data
+    # TODO: make sure we don't store tooooo much data
     def parse!(data)
-      @data = data
+      @data << data
     end
 
     def request_line
