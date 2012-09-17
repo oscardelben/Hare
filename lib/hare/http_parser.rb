@@ -1,6 +1,9 @@
 module Hare
   # This is an http 1.1 parser written in pure Ruby.
-  # It's slow!
+  # It's probably slow!
+  #
+  # Limitations:
+  #  * Can't handle multiline headers
   class HttpParser
 
     VALID_METHODS = [

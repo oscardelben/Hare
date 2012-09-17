@@ -66,13 +66,15 @@ describe Hare::HttpParser do
       data = ""
       data += "GET http://example.com"
       data += "\nAccept-Charset = something"
-      data += "\nFrom = http://example.com"
+      data += "\n    From =    http://example.com  "
       data += "\n\n"
 
       parser.parse! data
       parser.headers['Accept-Charset'].should == 'something'
       parser.headers['From'].should == 'http://example.com'
     end
+
+    it 'can handle multiline headers'
   end
 
   describe 'receiving data in chunks' do
