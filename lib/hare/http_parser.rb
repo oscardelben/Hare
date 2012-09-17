@@ -4,6 +4,7 @@ module Hare
   #
   # Limitations:
   #  * Can't handle multiline headers
+  #  * doesn't parse body yet
   class HttpParser
 
     VALID_METHODS = [
