@@ -97,4 +97,36 @@ describe Hare::HttpParser do
     end
   end
 
+  describe 'has_body?' do
+    it 'returns true when Content-Length is present' do
+      data = ""
+      data += "GET http://example.com"
+
+      data = "\nContent-Length = 123"
+      data += "\n\n"
+
+      parser.parse! data
+      parser.has_body?.should be_true
+    end
+
+    it 'returns true when Transfer-Encoding is present' do
+      data = ""
+      data += "GET http://example.com"
+
+      data = "\nTransfer-Encoding = 123"
+      data += "\n\n"
+
+      parser.parse! data
+      parser.has_body?.should be_true
+    end
+
+    it 'returns false when neither Content-Length nor Transfer-Encoding are present' do
+      data = ""
+      data += "GET http://example.com"
+
+      parser.parse! data
+      parser.has_body?.should be_false
+    end
+  end
+
 end

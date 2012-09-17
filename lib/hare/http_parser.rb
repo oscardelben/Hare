@@ -52,6 +52,10 @@ module Hare
       end
     end
 
+    def has_body?
+      headers['Content-Length'] || headers['Transfer-Encoding']
+    end
+
     private
 
     def parse_headers(headers_data)
