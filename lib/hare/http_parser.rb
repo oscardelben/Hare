@@ -57,6 +57,12 @@ module Hare
       headers['Content-Length'] || headers['Transfer-Encoding']
     end
 
+    # Returns true if headers and body are parsed (if needed)
+    # TODO: we don't parse the body yet
+    def finished?
+      headers.any?
+    end
+
     private
 
     def parse_headers(headers_data)

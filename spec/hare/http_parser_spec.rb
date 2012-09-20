@@ -129,4 +129,35 @@ describe Hare::HttpParser do
     end
   end
 
+  describe 'body' do
+  end
+
+  describe 'finished?' do
+
+    it 'returns true when headers are parsed and body is not present' do
+      data = ""
+      data += "GET http://example.com"
+
+      parser.parse! data
+      parser.request_line.should be_nil
+      parser.headers.should == {}
+
+      data = "\nAccept-Charset = something"
+      data += "\nFrom = http://example.com"
+      data += "\n\n"
+
+      parser.parse! data
+      parser.finished?.should be_true
+    end
+
+    it 'returns true when headers and body are parsed'
+
+    it 'returns false when headers are not parsed' do
+      parser.parse! "GET http://example.com"
+      parser.finished?.should be_false
+    end
+
+    it 'returns false when headers are parsed but body is expected but not parsed'
+  end
+
 end
