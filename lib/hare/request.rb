@@ -1,3 +1,5 @@
+require 'uri'
+
 # A Request object!
 module Hare
   class Request
@@ -22,7 +24,8 @@ module Hare
     def env
       {
         'REQUEST_METHOD' => http_parser.request_method,
-        'SCRIPT_NAME' => ''
+        'SCRIPT_NAME' => '',
+        'PATH_INFO' => URI(http_parser.request_uri).path
       }
     end
   end
