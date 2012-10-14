@@ -16,7 +16,14 @@ module Hare
     # Returns true if headers and body have been received, otherwise
     # false.
     def finished?
-      @http_parser.finished?
+      http_parser.finished?
+    end
+
+    def env
+      {
+        'REQUEST_METHOD' => http_parser.request_method,
+        'SCRIPT_NAME' => ''
+      }
     end
   end
 end
