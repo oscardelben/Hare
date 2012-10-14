@@ -25,7 +25,8 @@ module Hare
       {
         'REQUEST_METHOD' => http_parser.request_method,
         'SCRIPT_NAME' => '',
-        'PATH_INFO' => URI(http_parser.request_uri).path
+        'PATH_INFO' => URI(http_parser.request_uri).path,
+        'QUERY_STRING' => URI(http_parser.request_uri).query
       }
     end
   end

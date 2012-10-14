@@ -40,7 +40,7 @@ describe Hare::Request do
     describe 'PATH_INFO' do
       it 'should be equal to / by default' do
         data = ""
-        data += "GET http://example.com/?foo=ba"
+        data += "GET http://example.com/?foo=bar"
         data += "\nsome=header\n\n"
 
         request.add_data data
@@ -49,11 +49,31 @@ describe Hare::Request do
 
       it 'should be equal to the path' do
         data = ""
-        data += "GET http://example.com/some/path.html?foo=ba"
+        data += "GET http://example.com/some/path.html?foo=bar"
         data += "\nsome=header\n\n"
 
         request.add_data data
         request.env['PATH_INFO'].should == '/some/path.html'
+      end
+    end
+
+    describe 'QUERY_STRING' do
+      it 'should return the query part' do
+        data = ""
+        data += "GET http://example.com/?foo=bar&one=two#baz"
+        data += "\nsome=header\n\n"
+
+        request.add_data data
+        request.env['QUERY_STRING'].should == 'foo=bar&one=two'
+      end
+
+      it 'should return an empty string when not present' do
+        data = ""
+        data += "GET http://example.com/?#baz"
+        data += "\nsome=header\n\n"
+
+        request.add_data data
+        request.env['QUERY_STRING'].should == ''
       end
     end
   end
