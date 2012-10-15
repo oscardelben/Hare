@@ -22,8 +22,9 @@ module Hare
       if request.finished?
         status, headers, body = app.call(request.env)
 
-        response = Response.new(status, headers, body)
-        send_data response.data
+        # response = Response.new(status, headers, body)
+        # send_data response.data
+        send_data ""
 
         close_connection
       end
