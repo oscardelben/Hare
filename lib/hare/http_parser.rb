@@ -11,6 +11,9 @@ module Hare
       'OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT'
     ].freeze
 
+    CRLF = /\r\n/.freeze # TODO: is the same escape sequence the same in all systems?
+    CRLFCRLF = /\r\n\r\n/.freeze
+
     attr_accessor :data
 
     def initialize
@@ -25,7 +28,7 @@ module Hare
     end
 
     def request_line
-      data.split("\n").first if data.include? "\n"
+      data.split(CRLF).first if data =~ CRLF
     end
 
     def request_method
@@ -44,7 +47,7 @@ module Hare
 
     # Returns a hash of headers
     def headers
-      request_data = data.split("\n\n").first if data.include? "\n\n"
+      request_data = data.split(CRLFCRLF).first if data =~ CRLFCRLF
 
       if request_data
         parse_headers(request_data)
@@ -68,7 +71,7 @@ module Hare
     def parse_headers(headers_data)
       headers = {}
       # Ignore first line (request_line)
-      headers_data.split("\n")[1..-1].each do |line|
+      headers_data.split(CRLF)[1..-1].each do |line|
         key, value = line.split('=').map(&:strip)
         headers[key] = value
       end
