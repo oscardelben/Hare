@@ -98,7 +98,7 @@ describe Hare::Request do
         data += "\r\nsome=header\r\n\r\n"
 
         request.add_data data
-        request.env['SERVER_PORT'].should == '80'
+        request.env['SERVER_PORT'].should == 80
       end
 
       it 'should be equal to the provided port' do
@@ -107,7 +107,7 @@ describe Hare::Request do
         data += "\r\nsome=header\r\n\r\n"
 
         request.add_data data
-        request.env['SERVER_PORT'].should == '1234'
+        request.env['SERVER_PORT'].should == 1234
       end
     end
 
@@ -122,6 +122,21 @@ describe Hare::Request do
       request.env['HTTP_USER_AGENT'].should == 'My agent'
       request.env['HTTP_CONTENT_TYPE'].should == 'text/html'
       request.env['HTTP_AUTHORIZATION'].should == 'None'
+    end
+
+    it 'should include rack specific variables' do
+      data = ""
+      data += "GET http://example.com:1234/?"
+      data += "\r\nsome=header\r\n\r\n"
+
+      request.add_data data
+      request.env['rack.version'].should == [1,4]
+      request.env['rack.url_scheme'].should == 'http'
+      request.env['rack.input'].should_not be_nil
+      request.env['rack.errors'].should_not be_nil
+      request.env['rack.multithread'].should == true
+      request.env['rack.multiprocess'].should == true
+      request.env['rack.run_once'].should == false
     end
   end
 end

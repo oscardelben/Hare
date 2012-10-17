@@ -29,13 +29,23 @@ module Hare
         'PATH_INFO' => uri.path,
         'QUERY_STRING' => uri.query,
         'SERVER_NAME' => uri.hostname,
-        'SERVER_PORT' => uri.port.to_s || '80'
+        'SERVER_PORT' => uri.port
       }
 
       http_parser.headers.each do |name, value|
-        rack_name = 'HTTP_' + name.upcase.tr('-','_') # TODO: Should I handle other characters?
+        rack_name = 'HTTP_' + name.upcase.gsub('-','_')
         rack_env[rack_name] = value
       end
+
+      rack_env.update(
+        'rack.version' => [1,4],
+        'rack.url_scheme' => uri.scheme,
+        'rack.input' => StringIO.new(""),
+        'rack.errors' => $stderr,
+        'rack.multithread' => true,
+        'rack.multiprocess' => true,
+        'rack.run_once' => false
+      )
 
       rack_env
     end
