@@ -22,11 +22,13 @@ module Hare
     end
 
     def env
+      uri = URI(http_parser.request_uri)
       {
         'REQUEST_METHOD' => http_parser.request_method,
         'SCRIPT_NAME' => '',
-        'PATH_INFO' => URI(http_parser.request_uri).path,
-        'QUERY_STRING' => URI(http_parser.request_uri).query
+        'PATH_INFO' => uri.path,
+        'QUERY_STRING' => uri.query,
+        'SERVER_NAME' => uri.hostname
       }
     end
   end

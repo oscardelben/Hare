@@ -31,7 +31,6 @@ describe Hare::Request do
       request.env['REQUEST_METHOD'].should == 'POST'
     end
 
-    # TODO: Is this added by rack when necessary?
     it 'should include an empty SCRIPT_NAME' do
       data = ""
       data += "GET http://example.com/?foo=bar"
@@ -78,6 +77,17 @@ describe Hare::Request do
 
         request.add_data data
         request.env['QUERY_STRING'].should == ''
+      end
+    end
+
+    describe 'SERVER_NAME' do
+      it 'should be equal to the server name' do
+        data = ""
+        data += "GET http://example.com/?#baz"
+        data += "\r\nsome=header\r\n"
+
+        request.add_data data
+        request.env['SERVER_NAME'].should == 'example.com'
       end
     end
   end
