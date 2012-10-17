@@ -19,7 +19,7 @@ module Hare
       end
     end
 
-    # This undocumented callback gets called by #start_server every time
+    # This callback gets called by #start_server every time
     # a connection is received, passing the handler object (an instance
     # of +Socket+ in this case).
     #

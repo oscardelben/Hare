@@ -7,6 +7,7 @@ require 'rack/handler/hare'
 class MyApp
 
   def call(env)
+    p env
     [200, {}, [""]]
   end
 end

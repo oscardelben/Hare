@@ -143,5 +143,16 @@ describe Hare::Request do
       request.env['rack.multiprocess'].should == true
       request.env['rack.run_once'].should == false
     end
+
+    # TODO: make sure this behaves correctly and all fields are what
+    # they should be
+    it 'should include required fields with relative urls' do
+      data = ""
+      data += "GET /"
+      data += "\r\nsome=header\r\n\r\n"
+
+      request.add_data data
+      request.env['SERVER_PORT'].should == 80
+    end
   end
 end

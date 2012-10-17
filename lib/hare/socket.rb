@@ -2,7 +2,7 @@ module Hare
   class Socket < EventMachine::Connection
 
     # The role of this class is to handle the incoming data from the
-    # socket connection.
+    # socket connection and provide a response.
 
     attr_accessor :app, :request
 

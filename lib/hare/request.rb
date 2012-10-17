@@ -30,7 +30,7 @@ module Hare
         'PATH_INFO' => uri.path,
         'QUERY_STRING' => uri.query,
         'SERVER_NAME' => uri.hostname,
-        'SERVER_PORT' => uri.port
+        'SERVER_PORT' => uri.port || 80
       }
 
       http_parser.headers.each do |name, value|
