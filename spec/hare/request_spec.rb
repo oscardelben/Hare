@@ -116,13 +116,18 @@ describe Hare::Request do
       data += "GET http://example.com:1234/?"
       data += "\r\nUser-Agent=My agent"
       data += "\r\nContent-Type=text/html"
+      data += "\r\nContent-Length=0"
       data += "\r\nAuthorization=None\r\n\r\n"
 
       request.add_data data
       request.env['HTTP_USER_AGENT'].should == 'My agent'
-      request.env['HTTP_CONTENT_TYPE'].should == 'text/html'
+      request.env['CONTENT_TYPE'].should == 'text/html'
+      request.env['HTTP_CONTENT_TYPE'].should be_nil
+      request.env['CONTENT_LENGTH'].should == '0'
+      request.env['HTTP_CONTENT_LENGTH'].should be_nil
       request.env['HTTP_AUTHORIZATION'].should == 'None'
     end
+
 
     it 'should include rack specific variables' do
       data = ""

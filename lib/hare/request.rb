@@ -23,6 +23,7 @@ module Hare
 
     def env
       uri = URI(http_parser.request_uri)
+
       rack_env = {
         'REQUEST_METHOD' => http_parser.request_method,
         'SCRIPT_NAME' => '',
@@ -33,7 +34,12 @@ module Hare
       }
 
       http_parser.headers.each do |name, value|
-        rack_name = 'HTTP_' + name.upcase.gsub('-','_')
+        rack_name = name.upcase.gsub('-','_')
+
+        if !['CONTENT_TYPE', 'CONTENT_LENGTH'].include? rack_name
+          rack_name = 'HTTP_' + rack_name
+        end
+
         rack_env[rack_name] = value
       end
 
