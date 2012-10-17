@@ -28,7 +28,8 @@ module Hare
         'SCRIPT_NAME' => '',
         'PATH_INFO' => uri.path,
         'QUERY_STRING' => uri.query,
-        'SERVER_NAME' => uri.hostname
+        'SERVER_NAME' => uri.hostname,
+        'SERVER_PORT' => uri.port.to_s || '80'
       }
     end
   end

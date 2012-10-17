@@ -90,5 +90,25 @@ describe Hare::Request do
         request.env['SERVER_NAME'].should == 'example.com'
       end
     end
+
+    describe 'SERVER_PORT' do
+      it 'should be equal to 80 by defaul' do
+        data = ""
+        data += "GET http://example.com/?#baz"
+        data += "\r\nsome=header\r\n"
+
+        request.add_data data
+        request.env['SERVER_PORT'].should == '80'
+      end
+
+      it 'should be equal to the provided port' do
+        data = ""
+        data += "GET http://example.com:1234/?#baz"
+        data += "\r\nsome=header\r\n"
+
+        request.add_data data
+        request.env['SERVER_PORT'].should == '1234'
+      end
+    end
   end
 end
