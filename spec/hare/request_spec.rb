@@ -25,7 +25,7 @@ describe Hare::Request do
     it 'should include REQUEST_METHOD' do
       data = ""
       data += "POST http://example.com"
-      data += "\r\nsome=header\r\n"
+      data += "\r\nsome=header\r\n\r\n"
 
       request.add_data data
       request.env['REQUEST_METHOD'].should == 'POST'
@@ -34,7 +34,7 @@ describe Hare::Request do
     it 'should include an empty SCRIPT_NAME' do
       data = ""
       data += "GET http://example.com/?foo=bar"
-      data += "\r\nsome=header\r\n"
+      data += "\r\nsome=header\r\n\r\n"
 
       request.add_data data
       request.env['SCRIPT_NAME'].should == ''
@@ -44,7 +44,7 @@ describe Hare::Request do
       it 'should be equal to / by default' do
         data = ""
         data += "GET http://example.com/?foo=bar"
-        data += "\r\nsome=header\r\n"
+        data += "\r\nsome=header\r\n\r\n"
 
         request.add_data data
         request.env['PATH_INFO'].should == '/'
@@ -53,7 +53,7 @@ describe Hare::Request do
       it 'should be equal to the path' do
         data = ""
         data += "GET http://example.com/some/path.html?foo=bar"
-        data += "\r\nsome=header\r\n"
+        data += "\r\nsome=header\r\n\r\n"
 
         request.add_data data
         request.env['PATH_INFO'].should == '/some/path.html'
@@ -63,8 +63,8 @@ describe Hare::Request do
     describe 'QUERY_STRING' do
       it 'should return the query part' do
         data = ""
-        data += "GET http://example.com/?foo=bar&one=two#baz"
-        data += "\r\nsome=header\r\n"
+        data += "GET http://example.com/?foo=bar&one=two"
+        data += "\r\nsome=header\r\n\r\n"
 
         request.add_data data
         request.env['QUERY_STRING'].should == 'foo=bar&one=two'
@@ -72,8 +72,8 @@ describe Hare::Request do
 
       it 'should return an empty string when not present' do
         data = ""
-        data += "GET http://example.com/?#baz"
-        data += "\r\nsome=header\r\n"
+        data += "GET http://example.com/?"
+        data += "\r\nsome=header\r\n\r\n"
 
         request.add_data data
         request.env['QUERY_STRING'].should == ''
@@ -83,8 +83,8 @@ describe Hare::Request do
     describe 'SERVER_NAME' do
       it 'should be equal to the server name' do
         data = ""
-        data += "GET http://example.com/?#baz"
-        data += "\r\nsome=header\r\n"
+        data += "GET http://example.com/?"
+        data += "\r\nsome=header\r\n\r\n"
 
         request.add_data data
         request.env['SERVER_NAME'].should == 'example.com'
@@ -94,8 +94,8 @@ describe Hare::Request do
     describe 'SERVER_PORT' do
       it 'should be equal to 80 by defaul' do
         data = ""
-        data += "GET http://example.com/?#baz"
-        data += "\r\nsome=header\r\n"
+        data += "GET http://example.com/?"
+        data += "\r\nsome=header\r\n\r\n"
 
         request.add_data data
         request.env['SERVER_PORT'].should == '80'
@@ -103,12 +103,25 @@ describe Hare::Request do
 
       it 'should be equal to the provided port' do
         data = ""
-        data += "GET http://example.com:1234/?#baz"
-        data += "\r\nsome=header\r\n"
+        data += "GET http://example.com:1234/?"
+        data += "\r\nsome=header\r\n\r\n"
 
         request.add_data data
         request.env['SERVER_PORT'].should == '1234'
       end
+    end
+
+    it 'should include HTTP_ variables' do
+      data = ""
+      data += "GET http://example.com:1234/?"
+      data += "\r\nUser-Agent=My agent"
+      data += "\r\nContent-Type=text/html"
+      data += "\r\nAuthorization=None\r\n\r\n"
+
+      request.add_data data
+      request.env['HTTP_USER_AGENT'].should == 'My agent'
+      request.env['HTTP_CONTENT_TYPE'].should == 'text/html'
+      request.env['HTTP_AUTHORIZATION'].should == 'None'
     end
   end
 end

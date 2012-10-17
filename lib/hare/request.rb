@@ -23,7 +23,7 @@ module Hare
 
     def env
       uri = URI(http_parser.request_uri)
-      {
+      rack_env = {
         'REQUEST_METHOD' => http_parser.request_method,
         'SCRIPT_NAME' => '',
         'PATH_INFO' => uri.path,
@@ -31,6 +31,13 @@ module Hare
         'SERVER_NAME' => uri.hostname,
         'SERVER_PORT' => uri.port.to_s || '80'
       }
+
+      http_parser.headers.each do |name, value|
+        rack_name = 'HTTP_' + name.upcase.tr('-','_') # TODO: Should I handle other characters?
+        rack_env[rack_name] = value
+      end
+
+      rack_env
     end
   end
 end
