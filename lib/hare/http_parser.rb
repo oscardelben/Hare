@@ -11,7 +11,7 @@ module Hare
       'OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT'
     ].freeze
 
-    CRLF = /\r\n/.freeze # TODO: is the same escape sequence the same in all systems?
+    CRLF = /\r\n/.freeze
     CRLFCRLF = /\r\n\r\n/.freeze
 
     attr_accessor :data
