@@ -72,7 +72,7 @@ module Hare
       headers = {}
       # Ignore first line (request_line)
       headers_data.split(CRLF)[1..-1].each do |line|
-        key, value = line.split('=').map(&:strip)
+        key, value = line.split(':', 2).map(&:strip)
         headers[key] = value
       end
       headers

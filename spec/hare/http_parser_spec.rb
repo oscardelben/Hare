@@ -65,8 +65,8 @@ describe Hare::HttpParser do
     it 'returns an hash of headers' do
       data = ""
       data += "GET http://example.com"
-      data += "\r\nAccept-Charset = something"
-      data += "\r\n    From =    http://example.com  "
+      data += "\r\nAccept-Charset : something"
+      data += "\r\n    From :    http://example.com  "
       data += "\r\n\r\n"
 
       parser.parse! data
@@ -86,8 +86,8 @@ describe Hare::HttpParser do
       parser.request_line.should be_nil
       parser.headers.should == {}
 
-      data = "\r\nAccept-Charset = something"
-      data += "\r\nFrom = http://example.com"
+      data = "\r\nAccept-Charset : something"
+      data += "\r\nFrom : http://example.com"
       data += "\r\n\r\n"
 
       parser.parse! data
@@ -102,7 +102,7 @@ describe Hare::HttpParser do
       data = ""
       data += "GET http://example.com"
 
-      data = "\r\nContent-Length = 123"
+      data = "\r\nContent-Length : 123"
       data += "\r\n\r\n"
 
       parser.parse! data
@@ -113,7 +113,7 @@ describe Hare::HttpParser do
       data = ""
       data += "GET http://example.com"
 
-      data = "\r\nTransfer-Encoding = 123"
+      data = "\r\nTransfer-Encoding : 123"
       data += "\r\n\r\n"
 
       parser.parse! data
@@ -142,8 +142,8 @@ describe Hare::HttpParser do
       parser.request_line.should be_nil
       parser.headers.should == {}
 
-      data = "\r\nAccept-Charset = something"
-      data += "\r\nFrom = http://example.com"
+      data = "\r\nAccept-Charset : something"
+      data += "\r\nFrom : http://example.com"
       data += "\r\n\r\n"
 
       parser.parse! data
