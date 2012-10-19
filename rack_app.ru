@@ -8,7 +8,7 @@ class MyApp
 
   def call(env)
     p env
-    [200, {}, [""]]
+    [200, {}, ["Hello World!"]]
   end
 end
 

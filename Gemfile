@@ -1,7 +1,7 @@
 source :rubygems
 
 gem 'eventmachine'
-gem 'rake'
+gem 'rack'
 
 group :test do
   gem 'rspec'
