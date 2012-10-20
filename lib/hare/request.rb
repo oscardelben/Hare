@@ -34,13 +34,13 @@ module Hare
       }
 
       http_parser.headers.each do |name, value|
-        rack_name = name.upcase.gsub('-','_')
+        name = name.upcase.gsub('-','_') # converts Content-Type to CONTENT_TYPE
 
-        if !['CONTENT_TYPE', 'CONTENT_LENGTH'].include? rack_name
-          rack_name = 'HTTP_' + rack_name
+        if !['CONTENT_TYPE', 'CONTENT_LENGTH'].include? name
+          name = 'HTTP_' + name # append HTTP_ when needed
         end
 
-        rack_env[rack_name] = value
+        rack_env[name] = value
       end
 
       rack_env.update(
