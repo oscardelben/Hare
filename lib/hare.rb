@@ -9,6 +9,8 @@ require 'hare/response'
 require 'hare/server'
 require 'hare/socket'
 
+require 'rack/handler/hare'
+
 module Hare
   VERSION = "0.0.1"
 end

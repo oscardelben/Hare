@@ -139,8 +139,8 @@ describe Hare::Request do
       request.env['rack.url_scheme'].should == 'http'
       request.env['rack.input'].should_not be_nil
       request.env['rack.errors'].should_not be_nil
-      request.env['rack.multithread'].should == true
-      request.env['rack.multiprocess'].should == true
+      request.env['rack.multithread'].should == false
+      request.env['rack.multiprocess'].should == false
       request.env['rack.run_once'].should == false
     end
 

@@ -48,8 +48,8 @@ module Hare
         'rack.url_scheme' => uri.scheme,
         'rack.input' => StringIO.new(""),
         'rack.errors' => $stderr,
-        'rack.multithread' => true,
-        'rack.multiprocess' => true,
+        'rack.multithread' => false,
+        'rack.multiprocess' => false,
         'rack.run_once' => false
       )
 
