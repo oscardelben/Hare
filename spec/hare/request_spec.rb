@@ -132,12 +132,14 @@ describe Hare::Request do
     it 'should include rack specific variables' do
       data = ""
       data += "GET http://example.com:1234/?"
-      data += "\r\nsome:header\r\n\r\n"
+      data += "\r\nContent-Length : 5"
+      data += "\r\n\r\n"
+      data += "12345"
 
       request.add_data data
       request.env['rack.version'].should == [1,4]
       request.env['rack.url_scheme'].should == 'http'
-      request.env['rack.input'].should_not be_nil
+      request.env['rack.input'].read.should == "12345"
       request.env['rack.errors'].should_not be_nil
       request.env['rack.multithread'].should == false
       request.env['rack.multiprocess'].should == false

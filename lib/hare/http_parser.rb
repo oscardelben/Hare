@@ -35,7 +35,7 @@ module Hare
 
     def request_method
       if request_line
-        m = request_line.split.first
+        m = request_line.split(' ').first
         m && m.upcase!
         m if VALID_METHODS.include? m
       end
@@ -43,7 +43,7 @@ module Hare
 
     def request_uri
       if request_line
-        request_line.split[1]
+        request_line.split(' ')[1]
       end
     end
 

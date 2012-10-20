@@ -46,7 +46,7 @@ module Hare
       rack_env.update(
         'rack.version' => [1,4],
         'rack.url_scheme' => uri.scheme,
-        'rack.input' => StringIO.new(""),
+        'rack.input' => StringIO.new(http_parser.body.to_s),
         'rack.errors' => $stderr,
         'rack.multithread' => false,
         'rack.multiprocess' => false,
