@@ -130,6 +130,28 @@ describe Hare::HttpParser do
   end
 
   describe 'body' do
+
+    it 'returns nil when no body is expected' do
+      data = ""
+      data += "GET http://example.com"
+
+      parser.parse! data
+      parser.body.should == nil
+    end
+
+    it 'raises an error when Content-Length is above the maximum length allowed'
+
+    it 'can parse body when Content-Length is present' do
+      data = ""
+      data += "GET http://example.com"
+
+      data = "\r\nContent-Length : 5"
+      data += "\r\n\r\n"
+      data += "12345xx" # Add padding
+
+      parser.parse! data
+      parser.body.should == "12345"
+    end
   end
 
   describe 'finished?' do
@@ -150,7 +172,24 @@ describe Hare::HttpParser do
       parser.finished?.should be_true
     end
 
-    it 'returns true when headers and body are parsed'
+    it 'returns true when headers and body are parsed' do
+      data = ""
+      data += "GET http://example.com"
+
+      data = "\r\nContent-Length : 5"
+      data += "\r\n\r\n"
+
+      parser.parse! data
+      parser.finished?.should be_false
+
+      data = "123"
+      parser.parse! data
+      parser.finished?.should be_false
+
+      data = "45"
+      parser.parse! data
+      parser.finished?.should be_true
+    end
 
     it 'returns false when headers are not parsed' do
       parser.parse! "GET http://example.com"

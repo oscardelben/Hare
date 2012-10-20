@@ -1,3 +1,4 @@
 
 * Handle post
 * handle static files
+* Add timeout for requests

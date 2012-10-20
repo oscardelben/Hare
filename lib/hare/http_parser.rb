@@ -11,8 +11,10 @@ module Hare
       'OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT'
     ].freeze
 
-    CRLF = /\r\n/.freeze
+    CRLF = /\r\n/.freeze # TODO: is the same escape sequence the same in all systems?
     CRLFCRLF = /\r\n\r\n/.freeze
+
+    MAX_BODY_LENGTh = (1024 * 1024).to_i # 1 MB
 
     attr_accessor :data
 
@@ -47,6 +49,7 @@ module Hare
 
     # Returns a hash of headers
     def headers
+      # TODO: it may be highly inefficient to split large data
       request_data = data.split(CRLFCRLF).first if data =~ CRLFCRLF
 
       if request_data
@@ -63,7 +66,25 @@ module Hare
     # Returns true if headers and body are parsed (if needed)
     # TODO: we don't parse the body yet
     def finished?
-      headers.any?
+      if headers.any?
+        if has_body?
+          body && body.length == headers['Content-Length'].to_i
+        else
+          true
+        end
+      else
+        false
+      end
+    end
+
+    def body
+      # TODO: it may be highly inefficient to split large data
+      # TODO: handle length
+      if has_body?
+        body = data.split(CRLFCRLF, 2).last if data =~ CRLFCRLF
+        length = headers['Content-Length'].to_i - 1
+        body[0..length]
+      end
     end
 
     private

@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    hare (0.0.0)
+      eventmachine
+      rack
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -18,5 +25,6 @@ PLATFORMS
 
 DEPENDENCIES
   eventmachine
+  hare!
   rack
   rspec
