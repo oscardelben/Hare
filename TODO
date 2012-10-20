@@ -1,4 +1,4 @@
 
-* handle static files
+* handle static files (Do we need this?)
 * Add timeout for requests
 * Handle Transfer-Encoding
