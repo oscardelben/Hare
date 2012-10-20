@@ -1,5 +1,7 @@
 source :rubygems
 
+gemspec
+
 gem 'eventmachine'
 gem 'rack'
 
