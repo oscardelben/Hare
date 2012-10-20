@@ -15,14 +15,11 @@ After v1 is done, a general design decision will be takes by taking into
 consideration some benchmarks and a range of http 'features' by I'd like
 to implement.
 
+
 ### Status of this project
 
 This project is not usable in any way yet. It's still very very alpha
 yet and many core components have still to be built.
-
-### TODO
-
-These are things that I plan of working on.
 
 #### Http Parser:
 
