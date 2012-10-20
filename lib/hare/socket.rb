@@ -24,6 +24,7 @@ module Hare
 
         response = Response.new(status, headers, body)
 
+        send_data response.text
         close_connection_after_writing
       end
     end
