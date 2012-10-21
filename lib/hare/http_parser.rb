@@ -49,11 +49,13 @@ module Hare
 
     # Returns a hash of headers
     def headers
+      return @headers if @headers
+
       # TODO: it may be highly inefficient to split large data
       request_data = data.split(CRLFCRLF).first if data =~ CRLFCRLF
 
       if request_data
-        parse_headers(request_data)
+        @headers = parse_headers(request_data)
       else
         {}
       end
@@ -63,8 +65,8 @@ module Hare
       headers['Content-Length'] || headers['Transfer-Encoding']
     end
 
-    # Returns true if headers and body are parsed (if needed)
-    # TODO: we don't parse the body yet
+    # A request is parsed when headers and body (if necessary) are
+    # parsed.
     def finished?
       if headers.any?
         if has_body?
