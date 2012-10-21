@@ -56,19 +56,17 @@ module Hare
 
       if request_data
         @headers = parse_headers(request_data)
-      else
-        {}
       end
     end
 
     def has_body?
-      headers['Content-Length'] || headers['Transfer-Encoding']
+      headers && (headers['Content-Length'] || headers['Transfer-Encoding'])
     end
 
     # A request is parsed when headers and body (if necessary) are
     # parsed.
     def finished?
-      if headers.any?
+      if headers
         if has_body?
           body && body.length == headers['Content-Length'].to_i
         else
