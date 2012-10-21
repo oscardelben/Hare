@@ -11,6 +11,5 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
 
-  s.add_dependency('eventmachine')
   s.add_dependency('rack')
 end
