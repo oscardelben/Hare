@@ -4,17 +4,16 @@ module Hare
   #
   # Limitations:
   #  * Can't handle multiline headers
-  #  * doesn't parse body yet
   class HttpParser
 
     VALID_METHODS = [
       'OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT'
     ].freeze
 
-    CRLF = /\r\n/.freeze # TODO: is the same escape sequence the same in all systems?
+    CRLF = /\r\n/.freeze
     CRLFCRLF = /\r\n\r\n/.freeze
 
-    MAX_BODY_LENGTh = (1024 * 1024).to_i # 1 MB
+    MAX_BODY_LENGTH = (1024 * 1024).to_i # 1 MB
 
     attr_accessor :data
 
@@ -30,7 +29,7 @@ module Hare
     end
 
     def request_line
-      data.split(CRLF).first if data =~ CRLF
+      data.split(CRLF, 2).first if data =~ CRLF
     end
 
     def request_method
@@ -49,24 +48,23 @@ module Hare
 
     # Returns a hash of headers
     def headers
-      # TODO: it may be highly inefficient to split large data
+      return @headers if @headers
+
       request_data = data.split(CRLFCRLF).first if data =~ CRLFCRLF
 
       if request_data
-        parse_headers(request_data)
-      else
-        {}
+        @headers = parse_headers(request_data)
       end
     end
 
     def has_body?
-      headers['Content-Length'] || headers['Transfer-Encoding']
+      headers && (headers['Content-Length'] || headers['Transfer-Encoding'])
     end
 
-    # Returns true if headers and body are parsed (if needed)
-    # TODO: we don't parse the body yet
+    # A request is parsed when headers and body (if necessary) are
+    # parsed.
     def finished?
-      if headers.any?
+      if headers
         if has_body?
           body && body.length == headers['Content-Length'].to_i
         else

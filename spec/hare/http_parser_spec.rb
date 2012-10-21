@@ -48,18 +48,14 @@ describe Hare::HttpParser do
   end
 
   describe 'headers' do
-    it 'returns an empty hash when no headers are present' do
-      parser.parse! "GET http://example.com HTTP/1.1\r\n"
-      parser.headers.should == {}
-    end
 
-    it 'returns an empty hash when not finished parsing' do
+    it 'returns nil when not finished parsing' do
       data = ""
       data += "GET http://example.com"
       data += "\r\nAccept-Charset = something"
 
       parser.parse! data
-      parser.headers.should == {}
+      parser.headers.should be_nil
     end
 
     it 'returns an hash of headers' do
@@ -84,7 +80,7 @@ describe Hare::HttpParser do
 
       parser.parse! data
       parser.request_line.should be_nil
-      parser.headers.should == {}
+      parser.headers.should be_nil
 
       data = "\r\nAccept-Charset : something"
       data += "\r\nFrom : http://example.com"
@@ -162,7 +158,7 @@ describe Hare::HttpParser do
 
       parser.parse! data
       parser.request_line.should be_nil
-      parser.headers.should == {}
+      parser.headers.should be_nil
 
       data = "\r\nAccept-Charset : something"
       data += "\r\nFrom : http://example.com"

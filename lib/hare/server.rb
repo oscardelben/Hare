@@ -1,3 +1,5 @@
+require 'socket'
+
 module Hare
   class Server
 
@@ -12,18 +14,9 @@ module Hare
 
     def run
       # TODO: make sure it's not running already?
-      EM.run do
-        EM.start_server "127.0.0.1", 8080, Socket, &method(:initialize_socket)
+      Socket.tcp_server_loop('127.0.0.1', 8080)  do |socket, client_addrinfo|
+        SocketHandler.new(app).read_socket(socket)
       end
-    end
-
-    # This callback gets called by #start_server every time
-    # a connection is received, passing the handler object (an instance
-    # of +Socket+ in this case).
-    #
-    # We use this callback to pass the +app+ object to the socket.
-    def initialize_socket(socket)
-      socket.app = app
     end
 
   end
