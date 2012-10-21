@@ -4,17 +4,16 @@ module Hare
   #
   # Limitations:
   #  * Can't handle multiline headers
-  #  * doesn't parse body yet
   class HttpParser
 
     VALID_METHODS = [
       'OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT'
     ].freeze
 
-    CRLF = /\r\n/.freeze # TODO: is the same escape sequence the same in all systems?
+    CRLF = /\r\n/.freeze
     CRLFCRLF = /\r\n\r\n/.freeze
 
-    MAX_BODY_LENGTh = (1024 * 1024).to_i # 1 MB
+    MAX_BODY_LENGTH = (1024 * 1024).to_i # 1 MB
 
     attr_accessor :data
 
@@ -30,7 +29,7 @@ module Hare
     end
 
     def request_line
-      data.split(CRLF).first if data =~ CRLF
+      data.split(CRLF, 2).first if data =~ CRLF
     end
 
     def request_method
@@ -51,7 +50,6 @@ module Hare
     def headers
       return @headers if @headers
 
-      # TODO: it may be highly inefficient to split large data
       request_data = data.split(CRLFCRLF).first if data =~ CRLFCRLF
 
       if request_data

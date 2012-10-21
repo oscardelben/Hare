@@ -1,4 +1,10 @@
 
-* handle static files (Do we need this?)
+* Add threads to sockets
 * Add timeout for requests
+* Handle Keep Alive
 * Handle Transfer-Encoding
+* Handle HTTPS
+
+
+* Do benchamrks and if necessary improve the parser (make it a state
+ machine)
