@@ -12,9 +12,13 @@ module Hare
       @app = app
     end
 
-    def run
-      # TODO: make sure it's not running already?
-      Socket.tcp_server_loop('127.0.0.1', 8080)  do |socket, client_addrinfo|
+    def run options
+      options = {
+        :Host => '0.0.0.1',
+        :Port => 8080
+      }.merge(options)
+
+      Socket.tcp_server_loop(options[:Host], options[:Port])  do |socket, client_addrinfo|
         SocketHandler.new(app).read_socket(socket)
       end
     end
