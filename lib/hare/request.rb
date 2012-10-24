@@ -4,36 +4,21 @@ require 'uri'
 module Hare
   class Request
 
-    attr_accessor :http_parser
-
-    def initialize
-      @http_parser = HttpParser.new
-    end
-
-    # This method is called by Socket to append data
-    def add_data(data)
-      @http_parser.parse! data
-    end
-
-    # Returns true if headers and body have been received, otherwise
-    # false.
-    def finished?
-      http_parser.finished?
-    end
+    attr_accessor :request_uri, :request_method, :headers, :body
 
     def env
-      uri = URI(http_parser.request_uri)
+      uri = URI(request_uri)
 
       rack_env = {
-        'REQUEST_METHOD' => http_parser.request_method,
+        'REQUEST_METHOD' => request_method,
         'SCRIPT_NAME' => '',
         'PATH_INFO' => uri.path,
-        'QUERY_STRING' => uri.query,
+        'QUERY_STRING' => uri.query.to_s,
         'SERVER_NAME' => uri.hostname,
         'SERVER_PORT' => uri.port || 80
       }
 
-      http_parser.headers.each do |name, value|
+      headers.each do |name, value|
         name = name.upcase.gsub('-','_') # converts Content-Type to CONTENT_TYPE
 
         if !['CONTENT_TYPE', 'CONTENT_LENGTH'].include? name
@@ -46,7 +31,7 @@ module Hare
       rack_env.update(
         'rack.version' => [1,4],
         'rack.url_scheme' => uri.scheme,
-        'rack.input' => StringIO.new(http_parser.body.to_s),
+        'rack.input' => StringIO.new(body.to_s),
         'rack.errors' => $stderr,
         'rack.multithread' => false,
         'rack.multiprocess' => false,
