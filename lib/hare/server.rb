@@ -25,7 +25,7 @@ module Hare
         loop do
           begin
             socket = server.accept
-            SocketHandler.new(app).read_socket(socket)
+            TCPConnection.new(app).serve(socket)
           ensure
             socket.close
           end

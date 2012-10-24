@@ -6,7 +6,7 @@ require 'hare/http_parser'
 require 'hare/request'
 require 'hare/response'
 require 'hare/server'
-require 'hare/socket_handler'
+require 'hare/tcp_connection'
 
 require 'rack/handler/hare'
 

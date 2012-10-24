@@ -1,5 +1,5 @@
 module Hare
-  class SocketHandler
+  class TCPConnection
 
     # The role of this class is to handle the incoming data from the
     # socket connection and provide a response.
@@ -11,19 +11,15 @@ module Hare
       @request = Request.new
     end
 
-    def read_socket(socket)
+    def serve(socket)
       @socket = socket
 
-      begin
-        until request.finished?
-          data = socket.recvfrom(1024*1024)[0]
-          request.add_data data
-        end
-
-        send_response
-      ensure
-        socket.close
+      until request.finished?
+        data = socket.recvfrom(1024*1024)[0]
+        request.add_data data
       end
+
+      send_response
     end
 
     private
