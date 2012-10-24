@@ -18,8 +18,18 @@ module Hare
         :Port => 8080
       }.merge(options)
 
-      Socket.tcp_server_loop(options[:Host], options[:Port])  do |socket, client_addrinfo|
-        SocketHandler.new(app).read_socket(socket)
+      # The only reason why this happens inside a thread is so that we can return from this method.
+      server = TCPServer.new options[:Host], options[:Port]
+
+      Thread.new do
+        loop do
+          begin
+            socket = server.accept
+            SocketHandler.new(app).read_socket(socket)
+          ensure
+            socket.close
+          end
+        end
       end
     end
 
