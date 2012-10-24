@@ -4,25 +4,34 @@ module Hare
     # The role of this class is to handle the incoming data from the
     # socket connection and provide a response.
 
-    attr_accessor :app, :request, :socket
+    attr_accessor :app, :request, :socket, :http_parser
 
     def initialize(app)
       @app = app
       @request = Request.new
+      @http_parser = HttpParser.new
     end
 
     def serve(socket)
       @socket = socket
 
-      until request.finished?
+      until http_parser.finished?
         data = socket.recvfrom(1024*1024)[0]
-        request.add_data data
+        http_parser.parse! data
       end
 
+      build_request
       send_response
     end
 
     private
+
+    def build_request
+      request.request_uri = http_parser.request_uri
+      request.request_method = http_parser.request_method
+      request.headers = http_parser.headers
+      request.body = http_parser.body
+    end
 
     def send_response
       status, headers, body = app.call(request.env)
