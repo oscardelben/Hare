@@ -11,4 +11,5 @@ class MyApp
   end
 end
 
-Rack::Handler::Hare.run MyApp.new
+# Rack::Handler::Hare.run MyApp.new
+Rack::Handler::Thin.run MyApp.new

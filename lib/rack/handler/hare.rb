@@ -6,7 +6,7 @@ module Rack
         # TODO: handle options from Rack
 
         server = ::Hare::Server.new(app)
-        server.run
+        server.run options
       end
     end
 

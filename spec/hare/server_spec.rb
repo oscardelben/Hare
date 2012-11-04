@@ -12,7 +12,8 @@ describe Hare::Server do
 
     @options = {
       :Host => @host,
-      :Port => @port
+      :Port => @port,
+      :background => true
     }
 
     @server.run @options

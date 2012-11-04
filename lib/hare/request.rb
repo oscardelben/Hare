@@ -1,4 +1,5 @@
 require 'uri'
+require 'stringio'
 
 # A Request object!
 module Hare
