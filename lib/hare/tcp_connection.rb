@@ -8,25 +8,31 @@ module Hare
 
     def initialize(app)
       @app = app
-      @request = Request.new
       @http_parser = HttpParser.new
     end
 
     def serve(socket)
       @socket = socket
 
-      until http_parser.finished?
-        data = socket.recvfrom(1024*1024)[0]
-        http_parser.parse! data
-      end
+      loop do
+        until http_parser.finished?
+          data = socket.recv(1024*8)
+          http_parser.parse! data
+        end
 
-      build_request
-      send_response
+        build_request
+        send_response
+
+        break if http_parser.headers['Connection'] == 'close'
+
+        http_parser.clear
+      end
     end
 
     private
 
     def build_request
+      @request = Request.new
       request.request_uri = http_parser.request_uri
       request.request_method = http_parser.request_method
       request.headers = http_parser.headers
@@ -38,7 +44,8 @@ module Hare
 
       response = Response.new(status, headers, body)
 
-      socket.write response.text
+      socket.syswrite response.text
+      socket.flush
       body.close if body.respond_to? :close
     end
 

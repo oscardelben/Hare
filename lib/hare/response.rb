@@ -14,6 +14,8 @@ module Hare
 
       response = "HTTP/1.1 #{status} #{msg}\r\n"
 
+      headers.merge! 'Connection' => 'close'
+
       headers.each do |key, value|
         response += "#{key}: #{value}\r\n"
       end

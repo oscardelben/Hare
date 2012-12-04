@@ -15,7 +15,7 @@ module Hare
 
     MAX_BODY_LENGTH = (1024 * 1024).to_i # 1 MB
 
-    attr_accessor :data
+    attr_accessor :data, :headers
 
     def initialize
       @data = ""

@@ -31,10 +31,16 @@ describe Hare::Response do
 
     expected = "HTTP/1.1 200 OK\r\n"
     expected += "Content-Type: text/html\r\n"
-    expected += "Length: 1234 45\r\n\r\n"
+    expected += "Length: 1234 45\r\n"
+    expected += "Connection: close\r\n\r\n"
     expected += "hello world\n"
 
     response.text.should == expected
+  end
+
+  it 'should include connection header' do
+    response = Hare::Response.new 200, {}, [""]
+    response.text.should include 'Connection: close'
   end
 end
 
