@@ -1,8 +1,14 @@
 # Hare
 
 Experimental web server written in Ruby. This is a toy project that I'm
-using as a learning tool. It (eventually) interfaces with Rack directly.
-The goal is to be Rails and Sinatra compatible.
+using as a learning tool. It interfaces with Rack directly.
+
+
+### Usage:
+
+```
+bundle exec rails s hare
+```
 
 ### Notes:
 

@@ -14,19 +14,13 @@ module Hare
     def serve(socket)
       @socket = socket
 
-      loop do
-        until http_parser.finished?
-          data = socket.recv(1024*8)
-          http_parser.parse! data
-        end
-
-        build_request
-        send_response
-
-        break if http_parser.headers['Connection'] == 'close'
-
-        http_parser.clear
+      until http_parser.finished?
+        data = socket.recv(1024*8)
+        http_parser.parse! data
       end
+
+      build_request
+      send_response
     end
 
     private
