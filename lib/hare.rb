@@ -1,7 +1,5 @@
 $:.unshift File.dirname(__FILE__)
 
-require 'hare/hare'
-
 require 'rack'
 
 require 'hare/http_parser'

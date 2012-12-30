@@ -10,7 +10,6 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://github.com/oscardelben/hare'
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.extensions = ['ext/hare/extconf.rb']
 
   s.add_dependency('rack')
 end
